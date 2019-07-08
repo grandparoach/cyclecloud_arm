@@ -98,13 +98,26 @@
             ],
             "type": "string"
         },
-        "vnetName": {
-            "maxLength": 36,
-            "metadata": {
-                "description": "Name of the VNET to deploy Azure CycleCloud in"
-            },
-            "defaultValue": "azurecyclecloud",
-            "type": "string"
+        "existingVNetName": {
+          "type": "string",
+          "defaultValue": "POC-Network",
+          "metadata": {
+            "description": "name of existing Virtual Network"
+          }
+        },
+        "existingVNetResourceGroup": {
+          "type": "string",
+           "defaultValue": "POC-ResourceGroup",
+          "metadata": {
+            "description": "name of Resource Group where the existing Virtual Network resides"
+          }
+        },
+        "existingSubnetName": {
+          "type": "string",
+          "defaultValue": "POC-Subnet",
+          "metadata": {
+            "description": "name of Subnet on existing Virtual Network"
+          }
         },
         "storageAccountLocation": {
             "maxLength": 36,
@@ -116,41 +129,7 @@
         }
     },
     "resources": [
-        {
-            "type": "Microsoft.Network/virtualNetworks",
-            "name": "[parameters('vnetName')]",
-            "apiVersion": "[variables('networkApiVersion')]",
-            "location": "[variables('resourceLocation')]",
-            "properties": {
-                "addressSpace": {
-                    "addressPrefixes": [
-                        "10.0.0.0/20"
-                    ]
-                },
-                "subnets": [
-                    {
-                        "name": "cycle",
-                        "properties": {
-                            "addressPrefix": "10.0.1.0/28"
-                        }
-                    },
-                    {
-                        "name": "user",
-                        "properties": {
-                            "addressPrefix": "10.0.3.0/24"
-                        }
-                    },
-                    {
-                        "name": "compute",
-                        "properties": {
-                            "addressPrefix": "10.0.4.0/22"
-                        }
-                    }
-                ],
-                "virtualNetworkPeerings": []
-            },
-            "dependsOn": []
-        },
+        
         {
         "type": "Microsoft.Network/networkSecurityGroups",
         "name": "[variables('cycleNsgName')]",
@@ -335,8 +314,9 @@
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('cycleIPName'))]"
                             },
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), variables('cycleSubnet'))]"
+                                "id": "[variables('SubnetRef')]"
                             }
+                            
                         }
                     }
                 ],
@@ -356,11 +336,11 @@
         "cycleNic": "cycle-nic",
         "cycleNsgName": "cycle-nsg",
         "cycleIPName": "cycle-ip",
-        "cycleSubnet": "cycle",
         "installScriptURL": "[concat(variables('cycleDownloadURL'), '/', parameters('cyclecloudVersion'), '/cyclecloud_install.py')]",
         "namingInfix": "[toLower(take(uniqueString(subscription().subscriptionId, resourceGroup().id), 6))]",
         "networkApiVersion": "2017-06-01",
-        "resourceLocation": "[resourceGroup().location]"
+        "resourceLocation": "[resourceGroup().location]",
+        "vnetID": "[resourceId(parameters('existingVNetResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('existingVNetName'))]",
+        "SubnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('existingSubnetName'))]"
     }
 }
-
