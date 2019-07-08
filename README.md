@@ -3,11 +3,7 @@ Deploying Azure CycleCloud into a subscription using an Azure Resource Manager t
 
 ## Introduction
 - This repo contains an ARM template for deploying Azure CycleCloud.
-- The template deploys a VNET with 3 separate subnets:
-
-  1. `cycle`: The subnet in which the CycleCloud server is started in.
-  2. `compute`: A /22 subnet for the HPC clusters
-  3. `user`: The subnet for creating login nodes.
+- The template deploys to an existing VNet specified with input parameters for the VNet, the Resource Group of the VNet, and the subnet.
 
 - Provisions a VM in the `cycle` subnet and installs Azure CycleCloud on it.
 
@@ -40,7 +36,7 @@ Deploying Azure CycleCloud into a subscription using an Azure Resource Manager t
 ## Deploying Azure CycleCloud
 ### From the Azure Portal
 
-[![Deploy to Azure](https://azuredeploy.net/deploybutton.svg)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCycleCloudCommunity%2Fcyclecloud_arm%2Fdeploy-azure%2Fazuredeploy.json)
+[![Deploy to Azure](https://azuredeploy.net/deploybutton.svg)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fgrandparoach%2Fcyclecloud_arm%2Fexisting-vnet%2Fazuredeploy.json)
 
 - Click on the button above to deploy Azure Cyclecloud into your subscription. 
 - Required Fields:
