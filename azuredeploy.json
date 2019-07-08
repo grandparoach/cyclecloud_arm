@@ -33,7 +33,7 @@
              },
              "type": "securestring"
          },
-        "SSH Public Key": {
+        "SSH_Public_Key": {
             "metadata": {
                 "description": "The SSH public key to access the VMs."
             },
@@ -230,7 +230,7 @@
                         "ssh": {
                             "publicKeys": [
                                 {
-                                    "keyData": "[parameters('SSH Public Key')]",
+                                    "keyData": "[parameters('SSH_Public_Key')]",
                                     "path": "[variables('authorizedKeyFile')]"
                                 }
                             ]
